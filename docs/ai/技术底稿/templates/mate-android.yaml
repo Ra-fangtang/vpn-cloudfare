@@ -1,0 +1,130 @@
+# 原始模板含占位符，不能直接导入；请导入 generated 目录的已填参文件。
+# PROXY 与 DNS-PROXY 都不含 DIRECT；三入口不可用时不自动回退到本地直连。
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: false
+
+dns:
+  enable: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - dns.msftnsci.com
+    - www.msftnsci.com
+    - www.msftconnecttest.com
+  respect-rules: false
+  default-nameserver:
+    - "https://1.1.1.1/dns-query#DNS-PROXY"
+    - "https://8.8.8.8/dns-query#DNS-PROXY"
+  nameserver:
+    - "https://1.1.1.1/dns-query#DNS-PROXY"
+    - "https://8.8.8.8/dns-query#DNS-PROXY"
+
+tun:
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: true
+  dns-hijack:
+    - any:53
+    - tcp://any:53
+  route-exclude-address:
+    - __EDGE_A__/32
+    - __EDGE_B__/32
+    - __EDGE_C__/32
+
+proxies:
+  - name: CF-A
+    type: vless
+    server: __EDGE_A__
+    port: 443
+    uuid: __UUID__
+    udp: true
+    tls: true
+    skip-cert-verify: false
+    servername: __DOMAIN__
+    alpn:
+      - http/1.1
+    client-fingerprint: chrome
+    network: ws
+    ws-opts:
+      path: __WS_PATH__
+      headers:
+        Host: __DOMAIN__
+
+  - name: CF-B
+    type: vless
+    server: __EDGE_B__
+    port: 443
+    uuid: __UUID__
+    udp: true
+    tls: true
+    skip-cert-verify: false
+    servername: __DOMAIN__
+    alpn:
+      - http/1.1
+    client-fingerprint: chrome
+    network: ws
+    ws-opts:
+      path: __WS_PATH__
+      headers:
+        Host: __DOMAIN__
+
+  - name: CF-C
+    type: vless
+    server: __EDGE_C__
+    port: 443
+    uuid: __UUID__
+    udp: true
+    tls: true
+    skip-cert-verify: false
+    servername: __DOMAIN__
+    alpn:
+      - http/1.1
+    client-fingerprint: chrome
+    network: ws
+    ws-opts:
+      path: __WS_PATH__
+      headers:
+        Host: __DOMAIN__
+
+proxy-groups:
+  - name: PROXY
+    type: fallback
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - CF-A
+      - CF-B
+      - CF-C
+
+  - name: DNS-PROXY
+    type: fallback
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - CF-A
+      - CF-B
+      - CF-C
+
+rules:
+  - IP-CIDR,__EDGE_A__/32,DIRECT,no-resolve
+  - IP-CIDR,__EDGE_B__/32,DIRECT,no-resolve
+  - IP-CIDR,__EDGE_C__/32,DIRECT,no-resolve
+  - DOMAIN-SUFFIX,__DOMAIN__,DIRECT
+  - DOMAIN-SUFFIX,bilibili.com,DIRECT
+  - DOMAIN-SUFFIX,bilivideo.com,DIRECT
+  - DOMAIN-SUFFIX,hdslb.com,DIRECT
+  - DOMAIN-SUFFIX,qq.com,DIRECT
+  - DOMAIN-SUFFIX,taobao.com,DIRECT
+  - DOMAIN-SUFFIX,aliyun.com,DIRECT
+  - DOMAIN-SUFFIX,jd.com,DIRECT
+  - DOMAIN-SUFFIX,baidu.com,DIRECT
+  - DOMAIN-SUFFIX,163.com,DIRECT
+  - DOMAIN-SUFFIX,zhihu.com,DIRECT
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - MATCH,PROXY

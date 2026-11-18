@@ -1,0 +1,32 @@
+本地参数记录模板（仅供自己填写，填好后不要整体上传给 AI）
+本文件是记录表，不是 shell 脚本，不要 source、不要粘贴当命令执行。
+不记录密码、私钥正文、Cloudflare API Token 或一次性验证码。
+
+VPS_ADDR：在本地填写；聊天只写 VPS_ADDR
+SSH_PORT：在本地填写
+SSH_LOGIN_USER：在本地填写
+SSH_KEY_PATH：只记录自己的本机路径；不要上传私钥正文
+NODE_DOMAIN：自己的完整代理子域名；聊天只写 NODE_DOMAIN
+ZONE_NAME：自己的根域名；聊天可写 ZONE_NAME
+EDGE_A：本机验证后填写；聊天写 EDGE_A
+EDGE_B：本机验证后填写；聊天写 EDGE_B
+EDGE_C：本机验证后填写；聊天写 EDGE_C
+UUID_LOCAL：由 VPS 的 xray uuid 生成；在本地填写
+WS_PATH_LOCAL：由 VPS 随机生成；在本地填写
+WINDOWS_INTERFACE：实际出网物理网卡 Name；分享截图前检查是否带个人标识
+XRAY_SERVICE_USER/GROUP：从实际 systemd 配置核对，不预设 nobody
+CERT_EXPIRY：只记录到期时间和核对状态
+LOCAL_WORKDIR：自己的教程/生成目录
+BACKUP_OR_KNOWN_GOOD_COPY：自己的恢复点
+CURRENT_CONFIG_LABEL：当前加载的个人配置；不记录无关机场信息
+
+向 AI 可反馈的最少状态：
+系统=Debian 13；新 VPS=是/否；SSH=可用/不可用；
+443=未占用/已占用；CF 区域=Active/未激活；
+证书主机名匹配=是/否；证书与私钥公钥摘要一致=是/否；
+服务账户可读=是/否；代理 HTTP 204=是/否；
+TUN 开启且无显式代理请求正常=是/否；
+DNS 浏览器测试完成=是/否；出现本地运营商=是/否。
+
+若授权 AI 工具直接连接服务器，工具必须使用真实目标地址。
+别名可减少公开聊天中的暴露，不是对 AI/连接服务提供者完全隐身的保证。

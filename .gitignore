@@ -1,0 +1,27 @@
+# Private runtime/generated data: keep placeholders and public templates only.
+**/generated/
+**/generated-*/
+diagnostics/
+publication/
+.ssh/
+**/.ssh/
+id_rsa*
+id_ed25519*
+*.pem
+*.key
+*.p12
+*.pfx
+*.csr
+*.log
+*.log.txt
+*.har
+*.pcap
+*.pcapng
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+.env
+.env.*
+*已填写*
+*filled-parameters*
